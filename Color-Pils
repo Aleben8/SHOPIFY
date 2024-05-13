@@ -1,3 +1,8 @@
+Pre:
+Create 2 metafields to set HEX codes of all variants, and color name for all variants
+In these metafields, the elements must be separated by ", " in order to make the code execute.
+NOTE: the handle must be configured or modified as "BaseArticleCode-colorname"
+
 //Recall the code from product-variant-picker-color.liquid and add the label
 <legend class="form__label" style="
     margin-bottom: 5px;">Colore</legend>
