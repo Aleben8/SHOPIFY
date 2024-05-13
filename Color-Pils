@@ -1,0 +1,75 @@
+//Recall the code from product-variant-picker-color.liquid and add the label
+<legend class="form__label" style="
+    margin-bottom: 5px;">Colore</legend>
+{% render 'product-variant-picker-color' , product: product, collection: collection, block: block, product_form_id: product_form_id, variant_images: variant_images%}
+
+//
+{% comment %}
+// For each color in metafield colori.values replace every / with the dash
+// Get the matrix code from the main product and append the dash
+// Then, appen the color code adjusted
+// Eventually, replace empty spaces with nothing
+// Finally, generate the link to the color variant handle
+// Now it gets tricky again. Get the product infos through the all_product[handle]
+// Run the forloop to get Total Inventory Stock
+// Run the forloop to get Total Inventory Stock
+// End of loop: control the value, if greater than 0, show the color_button (coloured by the color_hex previously got), otherwise, skip
+{% endcomment %}
+
+{% assign artcode = product.metafields.artcode.value %}
+{% assign colors = product.metafields.colori.values %}
+{% assign color = colors | split: ', ' %}
+
+{% assign colors_hex = product.metafields.color.class %}
+{% assign color_hex = colors_hex | split: ', ' %}
+
+
+{%- if artcode != blank -%}
+  <div style="
+        flex: 0 0 100%;
+    padding: 0;
+    margin: 0 0 1.2rem;
+    max-width: 44rem;
+    min-width: fit-content;
+    border: none;">
+  {% for color in color %}
+     
+      {% assign coloradj = color | replace: '/', '-' %}
+      {% assign artcodemod = artcode | append: '-' %}
+    
+      {% assign link1 = artcodemod | append: coloradj %}
+    {% assign link1 = link1 | replace: " ","-" %}
+
+      {% assign link = 'https://cardiff.it/products/' | append: link1 %}
+    {% assign col_var = all_products[link1] %}
+    {% assign total = 0 %}
+    {% for variant in col_var.variants %}
+  {% assign total = total | plus:variant.inventory_quantity %}
+    {% endfor %}
+    {% if total > 0 %}
+      {% assign col_index = forloop.index0 %}
+      {% assign colorclass = color_hex[col_index] %}
+      <a
+        href="{{link }}"
+        style="
+                 display: inline-block;
+          text-align: center;
+          white-space: nowrap;
+          color: #FFFFFF;
+          text-decoration: none;
+          line-height: 1.2;
+          border-radius: 7px;
+          padding: 14px 20px;
+          cursor: pointer;
+           background-color: {{ colorclass }};
+            -webkit-filter: brightness(0.95);
+                  -webkit-box-shadow: 1px 1px 2px 0.5px rgba(var(--color-foreground), 0.25);
+        "
+      >
+        
+      </a>
+      {% endif %}
+  {%- endfor -%}
+  </div>
+{%- endif -%}
+  
